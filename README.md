@@ -2,10 +2,10 @@
 
 **Christian Marriage Counseling App — impartial wisdom for couples**
 
-> *"They two shall be one flesh"* — Ephesians 5:31
+> *"The two will become one flesh."* — Ephesians 5:31 (WEB)
 
-A private, offline-first Progressive Web App that helps married couples resolve conflicts through impartial Christian wisdom. Grounded in the synthesis of:
-- **Gottman Method** — 40+ years of empirical marriage research
+A private, single-page web app that helps married couples resolve conflicts through impartial Christian wisdom. Grounded in the synthesis of:
+- **Gottman Method** — Dr. John Gottman’s marriage research
 - **Love & Respect** — the Crazy Cycle, the Energizing Cycle
 - **Biblical wisdom** — Scripture-rooted guidance
 
@@ -19,22 +19,23 @@ A private, offline-first Progressive Web App that helps married couples resolve 
 
 ## Features
 
-- ✅ Offline-first — no internet required after initial load
-- ✅ Private — zero cloud, no data leaves your device
+- ✅ Private — no accounts, no server; sessions are saved only in your browser (localStorage)
 - ✅ Non-partial — analyzes both sides fairly
-- ✅ Christian-grounded — Scripture verses + counselor wisdom
+- ✅ Christian-grounded — Scripture quoted from the World English Bible (WEB, public domain) + counselor wisdom
 - ✅ Simple — no accounts, no setup, just open and speak
 
 ## Quick Start
 
-Open `index.html` in any modern browser. That's it.
+Live: https://bensonlok.github.io/one-flesh/ — or open `index.html` in any modern browser.
+
+> One Flesh is a companion for conversation, not a substitute for a pastor or licensed counselor.
 
 ## Tech Stack
 
-- Single HTML file PWA
+- Single HTML file (with a basic web app manifest)
 - Vanilla JavaScript (no frameworks)
-- IndexedDB for local storage
-- Web Speech API for voice input
+- Browser localStorage for saved sessions
+- Web Speech API for voice input (where the browser supports it)
 - CSS-only UI (no external dependencies)
 
 ## License

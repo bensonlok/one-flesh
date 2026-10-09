@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0B4F5C">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="application-name" content="One Flesh">
 <meta name="description" content="Christian marriage counseling app - restoring unity, one conversation at a time.">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
 <title>One Flesh - Christian Marriage Counseling</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -27,11 +29,11 @@ body{font-family:var(--font-sans);background:var(--ivory);color:var(--text);line
 .progress .dot{width:10px;height:10px;border-radius:50%;background:var(--text-light);transition:all .3s;border:2px solid transparent}
 .progress .dot.active{background:var(--gold);transform:scale(1.25);border-color:var(--amber)}
 .progress .dot.current{background:var(--teal);transform:scale(1.15)}
-#welcome-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:85vh;padding:30px 16px}
-.logo{font-size:56px;margin-bottom:8px;display:inline-block}
+#welcome-screen.active{display:flex}
+#welcome-screen{flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:85vh;padding:30px 16px}
+.logo{width:150px;height:150px;margin-bottom:14px;display:inline-block}.logo svg{width:100%;height:100%;display:block}
 .app-title{font-family:var(--font-serif);font-size:2.2rem;color:var(--teal);margin-bottom:6px;letter-spacing:.03em;font-weight:700}
 .app-subtitle{font-family:var(--font-serif);font-size:1.05rem;font-style:italic;color:var(--text-light);margin-bottom:28px;line-height:1.4}
-.rings{font-size:48px;margin:6px 0 16px;letter-spacing:8px}
 .cta-btn{display:block;width:100%;max-width:380px;padding:16px 22px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--teal),var(--dark-teal));color:var(--white);font-size:1.2rem;font-family:var(--font-serif);cursor:pointer;transition:all .3s;box-shadow:0 4px 20px var(--shadow);margin:12px auto;font-weight:600;letter-spacing:.03em}
 .cta-btn:hover,.cta-btn:focus-visible{transform:translateY(-2px);box-shadow:0 6px 28px var(--shadow);outline:2px solid var(--gold)}
 .cta-btn.gold{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--dark-teal)}
@@ -54,7 +56,8 @@ body{font-family:var(--font-sans);background:var(--ivory);color:var(--text);line
 .speech-controls{display:flex;gap:10px;align-items:center;justify-content:center;margin:12px 0;flex-wrap:wrap}
 .done-btn{background:var(--sage);color:var(--white);border:none;border-radius:var(--radius-sm);padding:11px 26px;font-size:.98rem;font-family:var(--font-serif);cursor:pointer;transition:all .3s;box-shadow:0 2px 10px rgba(122,155,107,.2)}
 .done-btn:hover{transform:translateY(-1px);background:var(--teal)}
-#reflect-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:30px 20px}
+#reflect-screen.active{display:flex}
+#reflect-screen{flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:30px 20px}
 .reflect-icon{font-size:68px;animation:glow 2.5s ease-in-out infinite;display:inline-block;margin-bottom:6px}
 .reflect-status{font-family:var(--font-serif);font-size:1.15rem;color:var(--teal);margin-bottom:4px}
 .reflect-verse{font-style:italic;color:var(--text-light);font-size:.92rem;margin-top:6px;line-height:1.4;min-height:2.2em}
@@ -94,7 +97,8 @@ body{font-family:var(--font-sans);background:var(--ivory);color:var(--text);line
 .reconciliation-box p{font-size:.95rem;color:var(--dark-teal);margin:8px 0;line-height:1.5}
 .reconciliation-box .recon-btn{background:var(--dark-teal);color:var(--white);border:none;border-radius:var(--radius-sm);padding:12px 28px;font-size:1rem;cursor:pointer;font-family:var(--font-serif);transition:all .3s;margin:8px auto;display:inline-block}
 .reconciliation-box .recon-btn:hover{transform:scale(1.04)}
-#prayer-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:30px 20px;text-align:center}
+#prayer-screen.active{display:flex}
+#prayer-screen{flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:30px 20px;text-align:center}
 .prayer-icon{font-size:52px;margin-bottom:8px}
 .prayer-title{font-family:var(--font-serif);font-size:1.25rem;color:var(--teal);margin-bottom:14px;font-weight:600}
 .prayer-text{font-family:var(--font-serif);font-size:1.02rem;font-style:italic;color:var(--text);line-height:1.65;max-width:540px;margin:0 auto 24px;text-align:left;padding:0 4px}
@@ -115,8 +119,7 @@ body{font-family:var(--font-sans);background:var(--ivory);color:var(--text);line
 <div id="app">
 <div class="progress" id="progressBar"></div>
 <div id="welcome-screen" class="screen active">
-  <div class="logo">&#x26E4;</div>
-  <div class="rings">&#x2E31; &#x2E31;</div>
+  <div class="logo" role="img" aria-label="Two wedding rings beneath a cross"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="60" cy="60" r="58" fill="#C9A84C" fill-opacity=".12"/><path d="M60 14v30M49 24h22" stroke="#0B4F5C" stroke-width="5" stroke-linecap="round"/><circle cx="47" cy="74" r="20" fill="none" stroke="#C9A84C" stroke-width="7"/><circle cx="73" cy="74" r="20" fill="none" stroke="#D4A34A" stroke-width="7"/><path d="M58.4 57.6A20 20 0 0 1 64.7 92.2" fill="none" stroke="#C9A84C" stroke-width="7"/></svg></div>
   <h1 class="app-title">One Flesh</h1>
   <p class="app-subtitle">Restoring Unity, One Conversation at a Time</p>
   <button class="cta-btn" onclick="startNewSession()">&#x276E; Begin a Session &#x276F;</button>
@@ -141,7 +144,7 @@ body{font-family:var(--font-sans);background:var(--ivory);color:var(--text);line
   <div class="reflect-center">
     <div class="reflect-icon">&#x1F54A;</div>
     <p class="reflect-status">Listening with Wisdom...</p>
-    <p class="reflect-verse" id="reflectVerse">"A gentle answer turns away wrath." &mdash; Proverbs 15:1</p>
+    <p class="reflect-verse" id="reflectVerse">“A gentle answer turns away wrath…” &mdash; Proverbs 15:1 (WEB)</p>
     <div class="reflect-loader"><span></span><span></span><span></span></div>
   </div>
 </div>
@@ -191,38 +194,38 @@ var TOPICS=[
 {id:"forgiveness",label:"Past Hurts/Forgiveness",kw:["forgiv","hurt","past","grudge","sorry","apologi","mistake","regret","wound","resent"]},
 {id:"jealousy",label:"Jealousy/Insecurity",kw:["jealous","insecur","envy","compar","threaten","anxious","worry about","possessiv"]},
 {id:"general",label:"General",kw:["feel","think","want","need","always","never","every","problem","issue","matter","both","help"]},
-]);
+];
 var WISDOM_DB={scripture:[
-{r:"Ephesians 5:21",t:"Submit to one another out of reverence for Christ.",e:"Marriage is mutual submission, not one-sided. Both bow to something greater.",a:"Take turns letting the other have the last word today.",tp:["communication","conflict","respect","trust"]},
-{r:"1 Corinthians 13:4-7",t:"Love is patient, love is kind. It does not envy or boast. It is not proud.",e:"Feelings are fickle; love is a choice measured by action.",a:"One act of patience today - pause before reacting.",tp:["communication","conflict","forgiveness","anger"]},
-{r:"Proverbs 15:1",t:"A gentle answer turns away wrath, but a harsh word stirs up anger.",e:"The tone decides the outcome. A soft word disarms the hardest heart.",a:"Before your next response, take a breath and speak gently.",tp:["communication","conflict","anger"]},
-{r:"James 1:19",t:"Be quick to listen, slow to speak, and slow to become angry.",e:"Listening first is not surrender; it is wisdom. Hear fully before replying.",a:"Let your spouse finish every thought before you respond.",tp:["communication","conflict","listening"]},
-{r:"1 Peter 3:7",t:"Husbands, treat your wives with respect as partners in all things.",e:"Respect is not earned; it is given as a gift of love.",a:"Husband: name one way your wife has shown strength this week.",tp:["respect","husband-duty"]},
-{r:"Colossians 3:12-13",t:"Husbands, love your wives. Wives, respect your husbands.",e:"Love and respect are twin commands. Both are called to both.",a:"Each say: I see your effort and I am grateful.",tp:["respect","love","communication"]},
-{r:"Matthew 5:9",t:"Blessed are the peacemakers, for they shall be called children of God.",e:"Peace is not the absence of conflict; it is the presence of love in the midst of it.",a:"Ask: What would peace look like to you right now?",tp:["conflict","reconciliation","faith"]},
-{r:"Proverbs 18:13",t:"To answer before listening is folly.",e:"We rush to defend before we understand. Slow down.",a:"Say back what you heard before giving your own view.",tp:["listening","communication","conflict"]},
-{r:"Song of Solomon 4:9",t:"You have made my heart beat faster - turn toward me, do not hide your face.",e:"Affirmation and delight belong in marriage. Your spouse still wants to be chosen by you.",a:"Give a genuine compliment to your spouse right now.",tp:["intimacy","appreciation","love"]},
-{r:"Psalm 51",t:"Have mercy on me, O God, for I have sinned against my own household.",e:"Repentance opens the door to healing. The willingness to say I was wrong is a superpower.",a:"Each say one thing you wish you had done differently.",tp:["forgiveness","reconciliation","conflict"]},
-{r:"Matthew 18:21-22",t:"Then Peter said, Lord, how often must I forgive? Jesus answered: Not seven times, but seventy-seven times.",e:"Forgiveness is not optional. It is not for them; it is for you.",a:"Let go of one small grudge today. Just let it go.",tp:["forgiveness","reconciliation","past-hurts"]},
-{r:"Ecclesiastes 4:9-12",t:"Two are better than one, for they have a greater return on their labor.",e:"You were not designed to carry this alone. Partnership is Gods design.",a:"Identify one task you can do together instead of apart.",tp:["partnership","support","chores"]},
-{r:"Proverbs 31:10-31",t:"A woman of valor - who can find? She works through the night, she rises before dawn.",e:"Partnership over pedestal. She is not a servant; she is a co-laborer.",a:"Husband: take one chore off her plate without being asked.",tp:["respect","partnership","chores"]},
-{r:"2 Corinthians 5:14-15",t:"We are all sinners. Grace is the only way forward.",e:"Neither of you is perfect. Grace means choosing love anyway.",a:"Name one imperfection you accept in your spouse today.",tp:["forgiveness","grace","conflict"]},
+{r:"Ephesians 5:21 (WEB)",t:"…subjecting yourselves to one another in the fear of Christ.",e:"Marriage is mutual submission, not one-sided. Both bow to something greater.",a:"Take turns letting the other have the last word today.",tp:["communication","conflict","respect","trust"]},
+{r:"1 Corinthians 13:4 (WEB)",t:"Love is patient and is kind; love doesn’t envy. Love doesn’t brag, is not proud…",e:"Feelings are fickle; love is a choice measured by action.",a:"One act of patience today - pause before reacting.",tp:["communication","conflict","forgiveness","anger"]},
+{r:"Proverbs 15:1 (WEB)",t:"A gentle answer turns away wrath, but a harsh word stirs up anger.",e:"The tone decides the outcome. A soft word disarms the hardest heart.",a:"Before your next response, take a breath and speak gently.",tp:["communication","conflict","anger"]},
+{r:"James 1:19 (WEB)",t:"…let every man be swift to hear, slow to speak, and slow to anger…",e:"Listening first is not surrender; it is wisdom. Hear fully before replying.",a:"Let your spouse finish every thought before you respond.",tp:["communication","conflict","listening"]},
+{r:"1 Peter 3:7 (WEB)",t:"You husbands, in the same way, live with your wives according to knowledge, giving honor to the woman as to the weaker vessel, as also being joint heirs of the grace of life, that your prayers may not be hindered.",e:"Respect is not earned; it is given as a gift of love.",a:"Husband: name one way your wife has shown strength this week.",tp:["respect","husband-duty"]},
+{r:"Ephesians 5:33 (WEB)",t:"Nevertheless each of you must also love his own wife even as himself; and let the wife see that she respects her husband.",e:"Love and respect are twin commands. Both are called to both.",a:"Each say: I see your effort and I am grateful.",tp:["respect","love","communication"]},
+{r:"Matthew 5:9 (WEB)",t:"Blessed are the peacemakers, for they shall be called children of God.",e:"Peace is not the absence of conflict; it is the presence of love in the midst of it.",a:"Ask: What would peace look like to you right now?",tp:["conflict","reconciliation","faith"]},
+{r:"Proverbs 18:13 (WEB)",t:"He who gives answer before he hears, that is folly and shame to him.",e:"We rush to defend before we understand. Slow down.",a:"Say back what you heard before giving your own view.",tp:["listening","communication","conflict"]},
+{r:"Song of Solomon 4:9 (WEB)",t:"You have ravished my heart, my sister, my bride. You have ravished my heart with one of your eyes, with one chain of your neck.",e:"Affirmation and delight belong in marriage. Your spouse still wants to be chosen by you.",a:"Give a genuine compliment to your spouse right now.",tp:["intimacy","appreciation","love"]},
+{r:"Psalm 51:10 (WEB)",t:"Create in me a clean heart, O God. Renew a right spirit within me.",e:"Repentance opens the door to healing, and it starts with asking God to change my own heart first. The willingness to say I was wrong is a superpower.",a:"Each say one thing you wish you had done differently.",tp:["forgiveness","reconciliation","conflict"]},
+{r:"Matthew 18:21-22 (WEB)",t:"Then Peter came and said to him, ‘Lord, how often shall my brother sin against me, and I forgive him? Until seven times?’ Jesus said to him, ‘I don’t tell you until seven times, but, until seventy times seven.’",e:"Forgiveness is not optional. It is not for them; it is for you.",a:"Let go of one small grudge today. Just let it go.",tp:["forgiveness","reconciliation","past-hurts"]},
+{r:"Ecclesiastes 4:9 (WEB)",t:"Two are better than one, because they have a good reward for their labor.",e:"You were not designed to carry this alone. Partnership is God’s design.",a:"Identify one task you can do together instead of apart.",tp:["partnership","support","chores"]},
+{r:"Proverbs 31:10 (WEB)",t:"Who can find a worthy woman? For her price is far above rubies.",e:"She is to be treasured, not taken for granted. She is a co-laborer, not a servant.",a:"Husband: take one chore off her plate without being asked.",tp:["respect","partnership","chores"]},
+{r:"Romans 3:23-24 (WEB)",t:"…for all have sinned, and fall short of the glory of God; being justified freely by his grace through the redemption that is in Christ Jesus…",e:"Neither of you is perfect. Grace means choosing love anyway.",a:"Name one imperfection you accept in your spouse today.",tp:["forgiveness","grace","conflict"]},
 ],insights:[
 {t:"Criticism attacks the person, not the problem. Try I feel instead of You always. That small shift changes everything.",p:["criticism"],tp:["communication","conflict"]},
-{t:"Contempt is the single best predictor of divorce. Sarcasm, eye-rolling, mockery - these are acid to love. Address the wound beneath the anger.",p:["contempt"],tp:["conflict","anger"]},
+{t:"Per Dr. John Gottman’s research, contempt is the single greatest predictor of divorce. Sarcasm, eye-rolling, mockery - these are acid to love. Address the wound beneath the anger.",p:["contempt"],tp:["conflict","anger"]},
 {t:"Defensiveness blocks repair. Even if you did not mean harm, the impact is real. Can you sit with that for a moment?",p:["defensiveness"],tp:["conflict","communication"]},
-{t:"Stonewalling is your nervous system protecting you, but it leaves your spouse alone in the pain. Take a 20-minute break, then come back.",p:["stonewalling"],tp:["conflict"]},
-{t:"She needs love; he needs respect. Neither is wrong - you are speaking past each other. The Crazy Cycle: without love she reacts, without respect he reacts.",c:"crazy-cycle",tp:["respect","love","communication"]},
+{t:"Stonewalling is your nervous system protecting you, but it leaves your spouse alone in the pain. Dr. John Gottman recommends a break of at least 20 minutes, then come back.",p:["stonewalling"],tp:["conflict"]},
+{t:"Dr. Emerson Eggerichs (Love & Respect) describes it this way: she needs love; he needs respect. Neither is wrong - you are speaking past each other. The Crazy Cycle: without love she reacts, without respect he reacts.",c:"crazy-cycle",tp:["respect","love","communication"]},
 {t:"Money arguments are never about money. They are about security, control, or trust. Find the real issue underneath the budget.",tp:["finances","trust"]},
-{t:"If you are giving love in your love language but your spouse receives in a different one, you are both starving in a room full of food. Learn their language.",tp:["love","communication","appreciation"]},
-{t:"69% of marital conflicts are unsolvable. They come from personality differences. The goal is not to solve them but to talk about them without contempt.",tp:["conflict","perpetual"]},
-{t:"A bid for connection is any attempt to get your partners attention, affection, or support. Turning toward bids builds the emotional bank account.",tp:["communication","love","connection"]},
-{t:"When heart rate exceeds 100bpm, the brain cannot process empathy or logic. If you are flooded, pause, breathe, and come back in 20 minutes.",tp:["conflict","anger","flooding"]},
+{t:"Dr. Gary Chapman (The 5 Love Languages) puts it this way: if you are giving love in your love language but your spouse receives in a different one, you are both starving in a room full of food. Learn their language.",tp:["love","communication","appreciation"]},
+{t:"Per Dr. John Gottman’s research, 69% of relationship conflicts are perpetual problems that never fully go away. They come from personality differences. The goal is not to solve them but to talk about them without contempt.",tp:["conflict","perpetual"]},
+{t:"In Dr. John Gottman’s research, a bid for connection is any attempt to get your partners attention, affection, or support. Turning toward bids builds the emotional bank account.",tp:["communication","love","connection"]},
+{t:"Per Dr. John Gottman’s research, when your heart rate goes above about 100 beats per minute you become flooded and it is very hard to listen or think clearly. If you are flooded, pause, breathe, and come back in 20 minutes.",tp:["conflict","anger","flooding"]},
 {t:"Parents: unified front or the children learn to divide and conquer. Discuss discipline in private, present as one team.",tp:["parenting","unity"]},
 {t:"In-laws are a common stress point. Boundaries are not walls; they are gates you both agree on. Discuss them together.",tp:["in-laws","boundaries","family"]},
 {t:"Intimacy is not just physical. It is feeling safe enough to be vulnerable. If distance has grown, start with non-sexual touch: a hand on the back, a hug that lasts.",tp:["intimacy","connection"]},
 {t:"Past hurts do not expire. They sit underneath the current argument. Ask: Is this really about the dishes, or is it about feeling unseen?",tp:["past-hurts","forgiveness","conflict"]},
-{t:"You always marry the wrong person - and then spend a lifetime learning to love the real one. The work is not finding the right person, but being the right person.",tp:["general","growth","commitment"]},
+{t:"Timothy Keller, quoting Stanley Hauerwas, says: you always marry the wrong person - and then spend a lifetime learning to love the real one. The work is not finding the right person, but being the right person.",tp:["general","growth","commitment"]},
 ],steps:[
 {t:"Take three slow breaths together before speaking again. Breathe in for 4, hold for 4, out for 4.",tp:["conflict","anger","flooding"]},
 {t:"Each say one specific thing you appreciate about the other from this week. Not general - specific.",tp:["appreciation","communication","love"]},
@@ -235,7 +238,7 @@ var WISDOM_DB={scripture:[
 {t:"Look at old photos of the two of you. Remember who you were before the weight of life settled in.",tp:["connection","intimacy","appreciation"]},
 {t:"Ask: What do you need from me right now? Then do it without argument. Just do it.",tp:["communication","support","love"]},
 {t:"Husband: tell her I am proud of you. Wife: tell him I believe in you.",tp:["respect","love","appreciation"]},
-{t:"If you have been distant, initiate a hug that lasts at least 20 seconds. Oxytocin needs time to release.",tp:["intimacy","connection"]},
+{t:"If you have been distant, offer a long, unhurried hug. Let it last.",tp:["intimacy","connection"]},
 ]};
 function startNewSession(){
 S={step:0,issueText:"",selectedTopics:[],spouseA:{name:"Husband",statement:"",spokenFirst:true},spouseB:{name:"Wife",statement:"",spokenFirst:false},speakingAsA:true,analysis:null,wisdom:null,prayer:"",sessionSaved:false};
@@ -261,7 +264,7 @@ document.getElementById("speechArea").value="";return}
 S.spouseB.statement=text;runAnalysis()}
 function runAnalysis(){
 showScreen("reflect-screen");setStep(3);
-var verses=["A gentle answer turns away wrath. - Proverbs 15:1","Be quick to listen, slow to speak. - James 1:19","Love is patient, love is kind. - 1 Corinthians 13:4","Submit to one another out of reverence for Christ. - Ephesians 5:21","Two are better than one. - Ecclesiastes 4:9","Blessed are the peacemakers. - Matthew 5:9"];
+var verses=["“A gentle answer turns away wrath…” - Proverbs 15:1 (WEB)","“…swift to hear, slow to speak, and slow to anger…” - James 1:19 (WEB)","“Love is patient and is kind…” - 1 Corinthians 13:4 (WEB)","“…subjecting yourselves to one another in the fear of Christ.” - Ephesians 5:21 (WEB)","“Two are better than one…” - Ecclesiastes 4:9 (WEB)","“Blessed are the peacemakers…” - Matthew 5:9 (WEB)"];
 var vi=0;var ri=setInterval(function(){document.getElementById("reflectVerse").innerHTML=verses[vi%verses.length];vi++},2200);
 setTimeout(function(){clearInterval(ri);doAnalysis();setStep(4);showScreen("analysis-screen")},6600)}
 function doAnalysis(){
@@ -300,7 +303,7 @@ var h="";var an=S.analysis;
 h+="<div class=\"analysis-card\"><h3>Patterns Observed</h3>";
 var sides=[{n:"Husband",p:an.pA},{n:"Wife",p:an.pB}];
 sides.forEach(function(s){var tags=[];if(s.p.criticism>0)tags.push("criticism");if(s.p.contempt>0)tags.push("contempt");if(s.p.defensiveness>0)tags.push("defensiveness");if(s.p.stonewalling>0)tags.push("stonewalling");if(tags.length>0){h+="<p><strong>"+s.n+":</strong> ";tags.forEach(function(t){h+="<span class=\"pattern-tag\">"+t+"</span>"});h+="</p>"}else{h+="<p>"+s.n+": No significant unhealthy patterns detected. Good.</p>"}});
-if(an.crazyCycle){h+="<div class=\"insight-item\"><span class=\"ilabel\">The Crazy Cycle</span><span class=\"itext\">She needs love; he needs respect. Neither is wrong. You are speaking past each other.</span></div>"}
+if(an.crazyCycle){h+="<div class=\"insight-item\"><span class=\"ilabel\">The Crazy Cycle (Eggerichs)</span><span class=\"itext\">She needs love; he needs respect. Neither is wrong. You are speaking past each other.</span></div>"}
 h+="</div><div class=\"analysis-card gold\"><h3>Fairness Check</h3>";
 an.fairness.forEach(function(f){h+="<div class=\"insight-item\"><span class=\"ilabel\">"+f.side+"</span><span class=\"itext\">"+f.msg+"</span></div>"});
 h+="</div>";document.getElementById("analysisCards").innerHTML=h}
@@ -309,7 +312,7 @@ function showWisdom(){
 var topics=S.analysis.topics;var h="";
 var matchedS=WISDOM_DB.scripture.filter(function(w){var m=false;w.tp.forEach(function(t){if(topics.indexOf(t)>-1)m=true});return m});
 if(matchedS.length>3)matchedS=shuffle(matchedS).slice(0,3);
-matchedS.forEach(function(w){h+="<div class=\"wisdom-card scripture\"><h3><span class=\"card-icon\">&#x1F4D6;</span>Scripture</h3><span class=\"ref\">"+w.r+"</span><p class=\"verse-text\">\""+w.t+"\"</p><p class=\"explain\">"+w.e+"</p><p class=\"action\">&#x271D; "+w.a+"</p></div>"});
+matchedS.forEach(function(w){h+="<div class=\"wisdom-card scripture\"><h3><span class=\"card-icon\">&#x1F4D6;</span>Scripture</h3><span class=\"ref\">"+w.r+"</span><p class=\"verse-text\">“"+w.t+"”</p><p class=\"explain\">"+w.e+"</p><p class=\"action\">&#x271D; "+w.a+"</p></div>"});
 var matchedI=WISDOM_DB.insights.filter(function(w){var m=false;w.tp.forEach(function(t){if(topics.indexOf(t)>-1)m=true});return m});
 if(matchedI.length>2)matchedI=shuffle(matchedI).slice(0,2);
 matchedI.forEach(function(w){h+="<div class=\"wisdom-card insight\"><h3><span class=\"card-icon\">&#x1F4A1;</span>Counselor Insight</h3><p class=\"explain\">"+w.t+"</p></div>"});

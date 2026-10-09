@@ -1,0 +1,13 @@
+{
+  "name": "One Flesh - Christian Marriage Counseling",
+  "short_name": "One Flesh",
+  "description": "Christian marriage counseling app - restoring unity, one conversation at a time.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F9F5F0",
+  "theme_color": "#0B4F5C",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
