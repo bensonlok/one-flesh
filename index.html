@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0B4F5C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="One Flesh">
+<meta name="description" content="Christian marriage counseling app - restoring unity, one conversation at a time.">
+<link rel="manifest" href="manifest.json">
+<title>One Flesh - Christian Marriage Counseling</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--teal:#0B4F5C;--gold:#C9A84C;--ivory:#F9F5F0;--sage:#7A9B6B;--amber:#D4A34A;--cream:#FDF8F0;--dark-teal:#083A45;--text:#2C3E4F;--text-light:#5A6B7A;--white:#FFF;--shadow:rgba(11,79,92,0.12);--radius:20px;--radius-sm:12px;--card-shadow:0 2px 12px rgba(11,79,92,0.08);--font-serif:Georgia,Times New Roman,serif;--font-sans:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+@media(prefers-color-scheme:dark){:root{--teal:#1A6A7E;--gold:#B8942C;--ivory:#1A1A2E;--sage:#5A7A5A;--amber:#A07020;--cream:#1E1E30;--dark-teal:#0D4050;--text:#C8C8D0;--text-light:#8888A0;--white:#222236;--shadow:rgba(0,0,0,0.3);--card-shadow:0 2px 12px rgba(0,0,0,0.2)}}
+html{font-size:17px;scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font-sans);background:var(--ivory);color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden}
+#app{max-width:720px;margin:0 auto;position:relative;min-height:100vh;display:flex;flex-direction:column;width:100%}
+.screen{display:none;padding:20px 16px 80px;animation:fadeIn .4s ease-out;flex:1;width:100%}.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(201,168,76,.3)}50%{box-shadow:0 0 45px rgba(201,168,76,.45),0 0 70px rgba(201,168,76,.15)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.progress{display:flex;gap:8px;padding:6px 16px;justify-content:center;margin-bottom:4px}
+.progress .dot{width:10px;height:10px;border-radius:50%;background:var(--text-light);transition:all .3s;border:2px solid transparent}
+.progress .dot.active{background:var(--gold);transform:scale(1.25);border-color:var(--amber)}
+.progress .dot.current{background:var(--teal);transform:scale(1.15)}
+#welcome-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:85vh;padding:30px 16px}
+.logo{font-size:56px;margin-bottom:8px;display:inline-block}
+.app-title{font-family:var(--font-serif);font-size:2.2rem;color:var(--teal);margin-bottom:6px;letter-spacing:.03em;font-weight:700}
+.app-subtitle{font-family:var(--font-serif);font-size:1.05rem;font-style:italic;color:var(--text-light);margin-bottom:28px;line-height:1.4}
+.rings{font-size:48px;margin:6px 0 16px;letter-spacing:8px}
+.cta-btn{display:block;width:100%;max-width:380px;padding:16px 22px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--teal),var(--dark-teal));color:var(--white);font-size:1.2rem;font-family:var(--font-serif);cursor:pointer;transition:all .3s;box-shadow:0 4px 20px var(--shadow);margin:12px auto;font-weight:600;letter-spacing:.03em}
+.cta-btn:hover,.cta-btn:focus-visible{transform:translateY(-2px);box-shadow:0 6px 28px var(--shadow);outline:2px solid var(--gold)}
+.cta-btn.gold{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--dark-teal)}
+.cta-btn.small{padding:12px 18px;font-size:1rem}
+.link-btn{background:none;border:none;color:var(--teal);font-family:var(--font-serif);font-size:.95rem;text-decoration:underline;cursor:pointer;padding:6px 10px;transition:color .3s}.link-btn:hover{color:var(--gold)}
+.screen-header{font-family:var(--font-serif);font-size:1.25rem;color:var(--teal);margin-bottom:6px;text-align:center;font-weight:600}
+.screen-sub{font-size:.92rem;color:var(--text-light);text-align:center;margin-bottom:16px;line-height:1.4}
+.topic-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+.topic-chip{background:var(--cream);border:1.5px solid var(--gold);border-radius:18px;padding:7px 14px;font-size:.82rem;color:var(--text);cursor:pointer;transition:all .2s}
+.topic-chip.selected{background:var(--gold);color:var(--white);border-color:var(--teal)}
+.text-input,.speech-area{width:100%;min-height:90px;padding:14px 16px;border:2px solid var(--teal);border-radius:var(--radius-sm);font-family:var(--font-serif);font-size:1.02rem;background:var(--cream);color:var(--text);resize:vertical;transition:border-color .3s;line-height:1.5}
+.text-input:focus,.speech-area:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(201,168,76,.2)}
+.mic-bar{display:flex;gap:14px;align-items:center;justify-content:center;margin:12px 0}
+.mic-btn{width:52px;height:52px;border-radius:50%;border:none;background:var(--teal);color:var(--white);font-size:1.5rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px var(--shadow)}
+.mic-btn:hover{transform:scale(1.1)}
+.mic-btn.recording{background:#C0392B;animation:pulse 1s infinite;box-shadow:0 0 20px rgba(192,57,43,.3)}
+.mic-status{font-size:.82rem;color:var(--text-light);font-style:italic;margin-top:4px}
+.speaker-label{font-family:var(--font-serif);font-size:1.15rem;color:var(--teal);margin:0 0 3px;text-align:center;font-weight:600}
+.speaker-sub{font-size:.9rem;color:var(--text-light);text-align:center;margin-bottom:12px}
+.speech-controls{display:flex;gap:10px;align-items:center;justify-content:center;margin:12px 0;flex-wrap:wrap}
+.done-btn{background:var(--sage);color:var(--white);border:none;border-radius:var(--radius-sm);padding:11px 26px;font-size:.98rem;font-family:var(--font-serif);cursor:pointer;transition:all .3s;box-shadow:0 2px 10px rgba(122,155,107,.2)}
+.done-btn:hover{transform:translateY(-1px);background:var(--teal)}
+#reflect-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:30px 20px}
+.reflect-icon{font-size:68px;animation:glow 2.5s ease-in-out infinite;display:inline-block;margin-bottom:6px}
+.reflect-status{font-family:var(--font-serif);font-size:1.15rem;color:var(--teal);margin-bottom:4px}
+.reflect-verse{font-style:italic;color:var(--text-light);font-size:.92rem;margin-top:6px;line-height:1.4;min-height:2.2em}
+.reflect-loader{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.reflect-loader span{width:12px;height:12px;border-radius:50%;background:var(--gold);animation:pulse 1.2s ease infinite}
+.reflect-loader span:nth-child(2){animation-delay:.2s}
+.reflect-loader span:nth-child(3){animation-delay:.4s}
+#analysis-screen{padding:16px}
+.analysis-card{background:var(--cream);border-radius:var(--radius);padding:18px;margin-bottom:12px;border-left:4px solid var(--teal);animation:slideUp .5s ease-out;box-shadow:var(--card-shadow)}
+.analysis-card.gold{border-left-color:var(--gold)}
+.analysis-card h3{font-family:var(--font-serif);font-size:1.05rem;color:var(--teal);margin-bottom:6px}
+.analysis-card p{font-size:.92rem;line-height:1.5;margin-bottom:6px;color:var(--text)}
+.perspectives-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.perspective-box{background:var(--cream);border-radius:var(--radius-sm);padding:14px;border:1.5px solid var(--teal)}
+.perspective-box h4{font-family:var(--font-serif);font-size:.95rem;color:var(--teal);margin-bottom:5px}
+.perspective-box p{font-size:.88rem;color:var(--text);max-height:120px;overflow-y:auto;line-height:1.4}
+.pattern-tag{display:inline-block;background:var(--amber);color:var(--white);border-radius:10px;padding:2px 8px;font-size:.78rem;margin:2px}
+.insight-item{background:var(--ivory);border-radius:var(--radius-sm);padding:10px 14px;margin:5px 0;border-left:3px solid var(--gold)}
+.insight-item .ilabel{font-weight:600;color:var(--teal);font-size:.82rem;display:block;margin-bottom:2px}
+.insight-item .itext{font-size:.9rem;color:var(--text);line-height:1.45}
+#wisdom-screen{padding:16px}
+.wisdom-card{background:var(--cream);border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;animation:slideUp .5s ease-out;box-shadow:var(--card-shadow)}
+.wisdom-card.scripture{border-left:4px solid var(--gold)}
+.wisdom-card.insight{border-left:4px solid var(--teal)}
+.wisdom-card.step{border-left:4px solid var(--sage)}
+.wisdom-card .card-icon{font-size:1.3rem;margin-right:6px;display:inline-block}
+.wisdom-card h3{font-family:var(--font-serif);font-size:1.05rem;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.wisdom-card.scripture h3{color:var(--gold)}
+.wisdom-card.insight h3{color:var(--teal)}
+.wisdom-card.step h3{color:var(--sage)}
+.wisdom-card .ref{font-style:italic;font-size:.82rem;color:var(--text-light);display:block;margin-bottom:3px}
+.wisdom-card .verse-text{font-family:var(--font-serif);font-style:italic;font-size:.98rem;color:var(--text);line-height:1.5;margin-bottom:5px}
+.wisdom-card .explain{font-size:.9rem;color:var(--text);line-height:1.5;margin-bottom:4px}
+.wisdom-card .action{font-size:.9rem;color:var(--teal);font-weight:500;padding:4px 0;line-height:1.4}
+.reconciliation-box{background:linear-gradient(135deg,var(--gold),var(--amber));border-radius:var(--radius);padding:18px;margin:14px 0;text-align:center}
+.reconciliation-box h3{font-family:var(--font-serif);font-size:1.05rem;color:var(--dark-teal);margin-bottom:6px}
+.reconciliation-box p{font-size:.95rem;color:var(--dark-teal);margin:8px 0;line-height:1.5}
+.reconciliation-box .recon-btn{background:var(--dark-teal);color:var(--white);border:none;border-radius:var(--radius-sm);padding:12px 28px;font-size:1rem;cursor:pointer;font-family:var(--font-serif);transition:all .3s;margin:8px auto;display:inline-block}
+.reconciliation-box .recon-btn:hover{transform:scale(1.04)}
+#prayer-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:30px 20px;text-align:center}
+.prayer-icon{font-size:52px;margin-bottom:8px}
+.prayer-title{font-family:var(--font-serif);font-size:1.25rem;color:var(--teal);margin-bottom:14px;font-weight:600}
+.prayer-text{font-family:var(--font-serif);font-size:1.02rem;font-style:italic;color:var(--text);line-height:1.65;max-width:540px;margin:0 auto 24px;text-align:left;padding:0 4px}
+.amen-btn{background:var(--teal);color:var(--white);border:none;border-radius:var(--radius);padding:16px 48px;font-size:1.2rem;font-family:var(--font-serif);cursor:pointer;transition:all .3s;box-shadow:0 4px 20px var(--shadow)}
+.amen-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px var(--shadow);background:var(--dark-teal)}
+#history-screen{padding:16px}
+.session-card{background:var(--cream);border-radius:var(--radius);padding:14px 18px;margin-bottom:10px;border-left:4px solid var(--teal);cursor:pointer;transition:all .2s}
+.session-card:hover{transform:translateX(4px);border-left-color:var(--gold)}
+.session-card .s-date{font-size:.82rem;color:var(--text-light);margin-bottom:2px}
+.session-card .s-title{font-family:var(--font-serif);font-size:.98rem;color:var(--teal);margin-bottom:3px}
+.session-card .s-status{font-size:.82rem;color:var(--sage);display:inline-block}
+.session-card .s-status.pending{color:var(--amber)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-light);font-family:var(--font-serif);font-size:1.1rem}
+.empty-state .empty-icon{font-size:48px;display:block;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="progress" id="progressBar"></div>
+<div id="welcome-screen" class="screen active">
+  <div class="logo">&#x26E4;</div>
+  <div class="rings">&#x2E31; &#x2E31;</div>
+  <h1 class="app-title">One Flesh</h1>
+  <p class="app-subtitle">Restoring Unity, One Conversation at a Time</p>
+  <button class="cta-btn" onclick="startNewSession()">&#x276E; Begin a Session &#x276F;</button>
+  <button class="link-btn" onclick="showScreen(&#x27;history-screen&#x27;);loadHistory()">Past Sessions</button>
+</div>
+<div id="issue-screen" class="screen">
+  <h2 class="screen-header">What is the issue today?</h2>
+  <p class="screen-sub">Pick a topic or just start describing. Your spouse will speak next.</p>
+  <div class="topic-chips" id="topicChips"></div>
+  <textarea class="text-input" id="issueInput" rows="4" placeholder="Describe what happened... just as you would to a friend."></textarea>
+  <div class="mic-bar"><button class="mic-btn" id="issueMicBtn" onclick="toggleIssueMic()">&#x1F3A4;</button><span class="mic-status" id="issueMicStatus">Tap mic for voice input</span></div>
+  <button class="cta-btn small" onclick="confirmIssue()">Continue</button>
+</div>
+<div id="speaking-screen" class="screen">
+  <h2 class="speaker-label" id="speakerLabel">Husband, share your side.</h2>
+  <p class="speaker-sub" id="speakerSub">Speak freely. Your spouse will have their turn.</p>
+  <textarea class="speech-area" id="speechArea" rows="6" placeholder="Share what happened from your perspective..."></textarea>
+  <div class="speech-controls"><button class="mic-btn" id="speechMicBtn" onclick="toggleSpeechMic()">&#x1F3A4;</button><span class="mic-status" id="speechMicStatus">Tap mic to record</span></div>
+  <div class="speech-controls"><button class="done-btn" onclick="submitSpouseSpeech()">&#x2713; I am done</button></div>
+</div>
+<div id="reflect-screen" class="screen">
+  <div class="reflect-center">
+    <div class="reflect-icon">&#x1F54A;</div>
+    <p class="reflect-status">Listening with Wisdom...</p>
+    <p class="reflect-verse" id="reflectVerse">"A gentle answer turns away wrath." &mdash; Proverbs 15:1</p>
+    <div class="reflect-loader"><span></span><span></span><span></span></div>
+  </div>
+</div>
+<div id="analysis-screen" class="screen">
+  <h2 class="screen-header">What We Heard</h2>
+  <div class="perspectives-grid" id="perspectivesGrid"></div>
+  <div id="analysisCards"></div>
+  <button class="cta-btn gold small" onclick="showWisdom()">Receive Wisdom &#x276F;</button>
+</div>
+<div id="wisdom-screen" class="screen">
+  <h2 class="screen-header">Sacred Wisdom</h2>
+  <div id="wisdomCards"></div>
+  <div class="reconciliation-box" id="reconBox"></div>
+  <button class="cta-btn gold small" onclick="showPrayer()">Close with Prayer &#x276F;</button>
+  <button class="cta-btn small" onclick="endSession()" style="margin-top:8px">Finish Session</button>
+</div>
+<div id="prayer-screen" class="screen">
+  <div class="prayer-icon">&#x1F64F;</div>
+  <h2 class="prayer-title">Let Us Pray</h2>
+  <div class="prayer-text" id="prayerText"></div>
+  <button class="amen-btn" onclick="endSession()">Amen &#x271D;</button>
+</div>
+<div id="history-screen" class="screen">
+  <h2 class="screen-header">Past Sessions</h2>
+  <div id="historyList"></div>
+  <button class="link-btn" onclick="showScreen(&#x27;welcome-screen&#x27;);updateProgress()">Back to Home</button>
+</div>
+</div>
+<script>
+var S={step:0,issueText:"",selectedTopics:[],spouseA:{name:"Husband",statement:"",spokenFirst:true},spouseB:{name:"Wife",statement:"",spokenFirst:false},speakingAsA:true,analysis:null,wisdom:null,prayer:"",sessionSaved:false};
+var SCREENS=["welcome-screen","issue-screen","speaking-screen","reflect-screen","analysis-screen","wisdom-screen","prayer-screen","history-screen"];
+function showScreen(i){SCREENS.forEach(function(s){document.getElementById(s).classList.remove("active")});document.getElementById(i).classList.add("active");window.scrollTo(0,0)}
+function updateProgress(){var b=document.getElementById("progressBar");var h="";var o=["welcome-screen","issue-screen","speaking-screen","reflect-screen","analysis-screen","wisdom-screen"];for(var i=0;i<o.length;i++){var c="dot";if(i===S.step)c+=" current";else if(i<S.step)c+=" active";h+="<span class=\""+c+"\"></span>"}b.innerHTML=h}
+function setStep(n){S.step=n;updateProgress()}
+var TOPICS=[
+{id:"communication",label:"Communication",kw:["talk","listen","said","told","argue","yell","ignore","interrupt","screaming","text","phone","ignore"]},
+{id:"money",label:"Money/Finances",kw:["money","finance","budget","spend","bill","debt","save","bank","account","expensive","pay","purchase","buy"]},
+{id:"chores",label:"Chores/Housework",kw:["chore","clean","dish","laundry","kitchen","house","mess","tidy","trash","cook","groceri"]},
+{id:"parenting",label:"Children/Parenting",kw:["child","kid","parent","baby","diciplin","school","homework","bedtime","teen","daughter","son"]},
+{id:"inlaws",label:"In-Laws/Family",kw:["in-law","mother","father","sister","brother","parent","family","relative","mom","dad","mother-in-law","father-in-law"]},
+{id:"intimacy",label:"Intimacy/Sex",kw:["intimacy","sex","affect","touch","romance","desire","reject","close","distance","bedroom","physical","hug"]},
+{id:"trust",label:"Trust/Honesty",kw:["trust","honest","lie","deceiv","secre","hid","betray","faithful","truth","suspicious"]},
+{id:"respect",label:"Respect",kw:["respect","dismiss","belittl","look down","talk down","value","appreciate","honor","disrespect","ignore my"]},
+{id:"faith",label:"Faith/Church",kw:["church","faith","god","jesus","prayer","bible","spiritual","believe","christian","religion","worship"]},
+{id:"time",label:"Time/Priority",kw:["time","busy","schedule","work late","never home","prioriti","neglect","alone","weekend","absent"]},
+{id:"anger",label:"Anger/Temper",kw:["angry","temper","fury","rage","yell","scream","shout","frustrat","lose it","explode","calm down"]},
+{id:"forgiveness",label:"Past Hurts/Forgiveness",kw:["forgiv","hurt","past","grudge","sorry","apologi","mistake","regret","wound","resent"]},
+{id:"jealousy",label:"Jealousy/Insecurity",kw:["jealous","insecur","envy","compar","threaten","anxious","worry about","possessiv"]},
+{id:"general",label:"General",kw:["feel","think","want","need","always","never","every","problem","issue","matter","both","help"]},
+]);
+var WISDOM_DB={scripture:[
+{r:"Ephesians 5:21",t:"Submit to one another out of reverence for Christ.",e:"Marriage is mutual submission, not one-sided. Both bow to something greater.",a:"Take turns letting the other have the last word today.",tp:["communication","conflict","respect","trust"]},
+{r:"1 Corinthians 13:4-7",t:"Love is patient, love is kind. It does not envy or boast. It is not proud.",e:"Feelings are fickle; love is a choice measured by action.",a:"One act of patience today - pause before reacting.",tp:["communication","conflict","forgiveness","anger"]},
+{r:"Proverbs 15:1",t:"A gentle answer turns away wrath, but a harsh word stirs up anger.",e:"The tone decides the outcome. A soft word disarms the hardest heart.",a:"Before your next response, take a breath and speak gently.",tp:["communication","conflict","anger"]},
+{r:"James 1:19",t:"Be quick to listen, slow to speak, and slow to become angry.",e:"Listening first is not surrender; it is wisdom. Hear fully before replying.",a:"Let your spouse finish every thought before you respond.",tp:["communication","conflict","listening"]},
+{r:"1 Peter 3:7",t:"Husbands, treat your wives with respect as partners in all things.",e:"Respect is not earned; it is given as a gift of love.",a:"Husband: name one way your wife has shown strength this week.",tp:["respect","husband-duty"]},
+{r:"Colossians 3:12-13",t:"Husbands, love your wives. Wives, respect your husbands.",e:"Love and respect are twin commands. Both are called to both.",a:"Each say: I see your effort and I am grateful.",tp:["respect","love","communication"]},
+{r:"Matthew 5:9",t:"Blessed are the peacemakers, for they shall be called children of God.",e:"Peace is not the absence of conflict; it is the presence of love in the midst of it.",a:"Ask: What would peace look like to you right now?",tp:["conflict","reconciliation","faith"]},
+{r:"Proverbs 18:13",t:"To answer before listening is folly.",e:"We rush to defend before we understand. Slow down.",a:"Say back what you heard before giving your own view.",tp:["listening","communication","conflict"]},
+{r:"Song of Solomon 4:9",t:"You have made my heart beat faster - turn toward me, do not hide your face.",e:"Affirmation and delight belong in marriage. Your spouse still wants to be chosen by you.",a:"Give a genuine compliment to your spouse right now.",tp:["intimacy","appreciation","love"]},
+{r:"Psalm 51",t:"Have mercy on me, O God, for I have sinned against my own household.",e:"Repentance opens the door to healing. The willingness to say I was wrong is a superpower.",a:"Each say one thing you wish you had done differently.",tp:["forgiveness","reconciliation","conflict"]},
+{r:"Matthew 18:21-22",t:"Then Peter said, Lord, how often must I forgive? Jesus answered: Not seven times, but seventy-seven times.",e:"Forgiveness is not optional. It is not for them; it is for you.",a:"Let go of one small grudge today. Just let it go.",tp:["forgiveness","reconciliation","past-hurts"]},
+{r:"Ecclesiastes 4:9-12",t:"Two are better than one, for they have a greater return on their labor.",e:"You were not designed to carry this alone. Partnership is Gods design.",a:"Identify one task you can do together instead of apart.",tp:["partnership","support","chores"]},
+{r:"Proverbs 31:10-31",t:"A woman of valor - who can find? She works through the night, she rises before dawn.",e:"Partnership over pedestal. She is not a servant; she is a co-laborer.",a:"Husband: take one chore off her plate without being asked.",tp:["respect","partnership","chores"]},
+{r:"2 Corinthians 5:14-15",t:"We are all sinners. Grace is the only way forward.",e:"Neither of you is perfect. Grace means choosing love anyway.",a:"Name one imperfection you accept in your spouse today.",tp:["forgiveness","grace","conflict"]},
+],insights:[
+{t:"Criticism attacks the person, not the problem. Try I feel instead of You always. That small shift changes everything.",p:["criticism"],tp:["communication","conflict"]},
+{t:"Contempt is the single best predictor of divorce. Sarcasm, eye-rolling, mockery - these are acid to love. Address the wound beneath the anger.",p:["contempt"],tp:["conflict","anger"]},
+{t:"Defensiveness blocks repair. Even if you did not mean harm, the impact is real. Can you sit with that for a moment?",p:["defensiveness"],tp:["conflict","communication"]},
+{t:"Stonewalling is your nervous system protecting you, but it leaves your spouse alone in the pain. Take a 20-minute break, then come back.",p:["stonewalling"],tp:["conflict"]},
+{t:"She needs love; he needs respect. Neither is wrong - you are speaking past each other. The Crazy Cycle: without love she reacts, without respect he reacts.",c:"crazy-cycle",tp:["respect","love","communication"]},
+{t:"Money arguments are never about money. They are about security, control, or trust. Find the real issue underneath the budget.",tp:["finances","trust"]},
+{t:"If you are giving love in your love language but your spouse receives in a different one, you are both starving in a room full of food. Learn their language.",tp:["love","communication","appreciation"]},
+{t:"69% of marital conflicts are unsolvable. They come from personality differences. The goal is not to solve them but to talk about them without contempt.",tp:["conflict","perpetual"]},
+{t:"A bid for connection is any attempt to get your partners attention, affection, or support. Turning toward bids builds the emotional bank account.",tp:["communication","love","connection"]},
+{t:"When heart rate exceeds 100bpm, the brain cannot process empathy or logic. If you are flooded, pause, breathe, and come back in 20 minutes.",tp:["conflict","anger","flooding"]},
+{t:"Parents: unified front or the children learn to divide and conquer. Discuss discipline in private, present as one team.",tp:["parenting","unity"]},
+{t:"In-laws are a common stress point. Boundaries are not walls; they are gates you both agree on. Discuss them together.",tp:["in-laws","boundaries","family"]},
+{t:"Intimacy is not just physical. It is feeling safe enough to be vulnerable. If distance has grown, start with non-sexual touch: a hand on the back, a hug that lasts.",tp:["intimacy","connection"]},
+{t:"Past hurts do not expire. They sit underneath the current argument. Ask: Is this really about the dishes, or is it about feeling unseen?",tp:["past-hurts","forgiveness","conflict"]},
+{t:"You always marry the wrong person - and then spend a lifetime learning to love the real one. The work is not finding the right person, but being the right person.",tp:["general","growth","commitment"]},
+],steps:[
+{t:"Take three slow breaths together before speaking again. Breathe in for 4, hold for 4, out for 4.",tp:["conflict","anger","flooding"]},
+{t:"Each say one specific thing you appreciate about the other from this week. Not general - specific.",tp:["appreciation","communication","love"]},
+{t:"Tonight, hold hands and pray together. Just three sentences: gratitude, confession, blessing.",tp:["faith","prayer","connection"]},
+{t:"Schedule a 30-minute state of the union this weekend. No phones. No interruptions. Just listen.",tp:["communication","connection","planning"]},
+{t:"Write down what you think your spouses love language is and one way to speak it this week.",tp:["love","appreciation","communication"]},
+{t:"Before bed, share: one high and one low from your day. This builds the Love Map.",tp:["connection","communication","gottman"]},
+{t:"If an argument is stuck, one of you say: I want to understand. Help me see what you are feeling.",tp:["conflict","listening","empathy"]},
+{t:"Do one unexpected act of service today: make the coffee, fold the laundry, start the car on a cold morning.",tp:["chores","love","respect"]},
+{t:"Look at old photos of the two of you. Remember who you were before the weight of life settled in.",tp:["connection","intimacy","appreciation"]},
+{t:"Ask: What do you need from me right now? Then do it without argument. Just do it.",tp:["communication","support","love"]},
+{t:"Husband: tell her I am proud of you. Wife: tell him I believe in you.",tp:["respect","love","appreciation"]},
+{t:"If you have been distant, initiate a hug that lasts at least 20 seconds. Oxytocin needs time to release.",tp:["intimacy","connection"]},
+]};
+function startNewSession(){
+S={step:0,issueText:"",selectedTopics:[],spouseA:{name:"Husband",statement:"",spokenFirst:true},spouseB:{name:"Wife",statement:"",spokenFirst:false},speakingAsA:true,analysis:null,wisdom:null,prayer:"",sessionSaved:false};
+document.getElementById("issueInput").value="";document.getElementById("speechArea").value="";
+loadTopicChips();showScreen("issue-screen");setStep(1)}
+function loadTopicChips(){
+var h="";TOPICS.forEach(function(t){h+="<span class=\"topic-chip\" data-id=\""+t.id+"\" onclick=\"toggleTopic(this)\">"+t.label+"</span>"});
+document.getElementById("topicChips").innerHTML=h}
+function toggleTopic(el){el.classList.toggle("selected");var id=el.getAttribute("data-id");var idx=S.selectedTopics.indexOf(id);if(idx>-1)S.selectedTopics.splice(idx,1);else S.selectedTopics.push(id)}
+function confirmIssue(){
+S.issueText=document.getElementById("issueInput").value;if(S.issueText.trim().length<3){alert("Please describe the issue a bit more.");return}
+showScreen("speaking-screen");setStep(2);
+document.getElementById("speakerLabel").textContent="Husband, share your side.";
+document.getElementById("speakerSub").textContent="Speak freely. Your spouse will have their turn.";
+S.speakingAsA=true;S.spouseA.statement="";document.getElementById("speechArea").value=""}
+function submitSpouseSpeech(){
+var text=document.getElementById("speechArea").value;if(text.trim().length<3){alert("Please share what happened from your perspective.");return}
+if(S.speakingAsA){
+S.spouseA.statement=text;S.speakingAsA=false;
+document.getElementById("speakerLabel").textContent="Wife, share your side.";
+document.getElementById("speakerSub").textContent="Thank you, Husband. Now let me hear from you.";
+document.getElementById("speechArea").value="";return}
+S.spouseB.statement=text;runAnalysis()}
+function runAnalysis(){
+showScreen("reflect-screen");setStep(3);
+var verses=["A gentle answer turns away wrath. - Proverbs 15:1","Be quick to listen, slow to speak. - James 1:19","Love is patient, love is kind. - 1 Corinthians 13:4","Submit to one another out of reverence for Christ. - Ephesians 5:21","Two are better than one. - Ecclesiastes 4:9","Blessed are the peacemakers. - Matthew 5:9"];
+var vi=0;var ri=setInterval(function(){document.getElementById("reflectVerse").innerHTML=verses[vi%verses.length];vi++},2200);
+setTimeout(function(){clearInterval(ri);doAnalysis();setStep(4);showScreen("analysis-screen")},6600)}
+function doAnalysis(){
+var a=S.spouseA.statement.toLowerCase();var b=S.spouseB.statement.toLowerCase();var both=a+" "+b;
+var topics=[];
+TOPICS.forEach(function(t){t.kw.forEach(function(k){if(both.indexOf(k)>-1){if(topics.indexOf(t.id)<0)topics.push(t.id)}})});
+if(topics.length===0)topics.push("general");
+var pA={criticism:0,contempt:0,defensiveness:0,stonewalling:0};
+var pB={criticism:0,contempt:0,defensiveness:0,stonewalling:0};
+var crit=["you always","you never","you are so","you are just","why do you always","you never listen","you always do"];
+var cont=["whatever","roll my eye","seriously?","unbelievable","you are ridiculous","what is wrong with you","you are a"];
+var def=["it is not my fault","you are the one","because you","I only","if you would just","you started","not my problem"];
+var stone=["fine","whatever you say","I do not want to talk","leave me alone","nothing","i am done","i am going"];
+crit.forEach(function(w){if(a.indexOf(w)>-1)pA.criticism++;if(b.indexOf(w)>-1)pB.criticism++});
+cont.forEach(function(w){if(a.indexOf(w)>-1)pA.contempt++;if(b.indexOf(w)>-1)pB.contempt++});
+def.forEach(function(w){if(a.indexOf(w)>-1)pA.defensiveness++;if(b.indexOf(w)>-1)pB.defensiveness++});
+stone.forEach(function(w){if(a.indexOf(w)>-1)pA.stonewalling++;if(b.indexOf(w)>-1)pB.stonewalling++});
+var crazyCycle=false;
+var loveWords=["unloved","uncared","unwanted","ignored","alone","neglect","no affection","not important","dont care"];
+var respectWords=["disrespect","belittle","dismiss","look down","talk down","unappreciated","not valued","undermine"];
+loveWords.forEach(function(w){if(a.indexOf(w)>-1||b.indexOf(w)>-1)crazyCycle=true});
+respectWords.forEach(function(w){if(a.indexOf(w)>-1||b.indexOf(w)>-1)crazyCycle=true});
+var fairness=[];
+if(pA.criticism>0||pA.contempt>0)fairness.push({side:"A",msg:"May be attacking the person instead of the issue. Try using I feel statements instead of You always."});
+if(pB.criticism>0||pB.contempt>0)fairness.push({side:"B",msg:"May be attacking the person instead of the issue. Try using I feel statements instead of You always."});
+if(pA.defensiveness>0)fairness.push({side:"A",msg:"Defensiveness may be blocking understanding. Even if unintentional, the impact is still real."});
+if(pB.defensiveness>0)fairness.push({side:"B",msg:"Defensiveness may be blocking understanding. Even if unintentional, the impact is still real."});
+if(pA.stonewalling>0)fairness.push({side:"A",msg:"Withdrawal may leave the other person feeling alone. A 20-minute break is fine, but please come back."});
+if(pB.stonewalling>0)fairness.push({side:"B",msg:"Withdrawal may leave the other person feeling alone. A 20-minute break is fine, but please come back."});
+if(fairness.length===0)fairness.push({side:"Both",msg:"You both seem to be communicating in good faith. That is a great foundation for healing."});
+S.analysis={topics:topics,pA:pA,pB:pB,crazyCycle:crazyCycle,fairness:fairness};renderAnalysis()}
+function renderAnalysis(){
+var a=S.spouseA.statement,b=S.spouseB.statement;
+document.getElementById("perspectivesGrid").innerHTML="<div class=\"perspective-box\"><h4>Husband</h4><p>"+escHtml(a)+"</p></div><div class=\"perspective-box\"><h4>Wife</h4><p>"+escHtml(b)+"</p></div>";
+var h="";var an=S.analysis;
+h+="<div class=\"analysis-card\"><h3>Patterns Observed</h3>";
+var sides=[{n:"Husband",p:an.pA},{n:"Wife",p:an.pB}];
+sides.forEach(function(s){var tags=[];if(s.p.criticism>0)tags.push("criticism");if(s.p.contempt>0)tags.push("contempt");if(s.p.defensiveness>0)tags.push("defensiveness");if(s.p.stonewalling>0)tags.push("stonewalling");if(tags.length>0){h+="<p><strong>"+s.n+":</strong> ";tags.forEach(function(t){h+="<span class=\"pattern-tag\">"+t+"</span>"});h+="</p>"}else{h+="<p>"+s.n+": No significant unhealthy patterns detected. Good.</p>"}});
+if(an.crazyCycle){h+="<div class=\"insight-item\"><span class=\"ilabel\">The Crazy Cycle</span><span class=\"itext\">She needs love; he needs respect. Neither is wrong. You are speaking past each other.</span></div>"}
+h+="</div><div class=\"analysis-card gold\"><h3>Fairness Check</h3>";
+an.fairness.forEach(function(f){h+="<div class=\"insight-item\"><span class=\"ilabel\">"+f.side+"</span><span class=\"itext\">"+f.msg+"</span></div>"});
+h+="</div>";document.getElementById("analysisCards").innerHTML=h}
+function escHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function showWisdom(){
+var topics=S.analysis.topics;var h="";
+var matchedS=WISDOM_DB.scripture.filter(function(w){var m=false;w.tp.forEach(function(t){if(topics.indexOf(t)>-1)m=true});return m});
+if(matchedS.length>3)matchedS=shuffle(matchedS).slice(0,3);
+matchedS.forEach(function(w){h+="<div class=\"wisdom-card scripture\"><h3><span class=\"card-icon\">&#x1F4D6;</span>Scripture</h3><span class=\"ref\">"+w.r+"</span><p class=\"verse-text\">\""+w.t+"\"</p><p class=\"explain\">"+w.e+"</p><p class=\"action\">&#x271D; "+w.a+"</p></div>"});
+var matchedI=WISDOM_DB.insights.filter(function(w){var m=false;w.tp.forEach(function(t){if(topics.indexOf(t)>-1)m=true});return m});
+if(matchedI.length>2)matchedI=shuffle(matchedI).slice(0,2);
+matchedI.forEach(function(w){h+="<div class=\"wisdom-card insight\"><h3><span class=\"card-icon\">&#x1F4A1;</span>Counselor Insight</h3><p class=\"explain\">"+w.t+"</p></div>"});
+var matchedSt=WISDOM_DB.steps.filter(function(w){var m=false;w.tp.forEach(function(t){if(topics.indexOf(t)>-1)m=true});return m});
+if(matchedSt.length>2)matchedSt=shuffle(matchedSt).slice(0,2);
+matchedSt.forEach(function(w){h+="<div class=\"wisdom-card step\"><h3><span class=\"card-icon\">&#x1F6E0;</span>Practical Step</h3><p class=\"action\">"+w.t+"</p></div>"});
+document.getElementById("wisdomCards").innerHTML=h;
+var rec=["forgiveness","reconciliation","conflict","anger"];var hasR=false;topics.forEach(function(t){if(rec.indexOf(t)>-1)hasR=true});
+var rm=hasR?"Would you be willing to forgive each other and start fresh? The marriage is worth more than being right.":"Would you be willing to take one small step together this week to strengthen your bond?";
+document.getElementById("reconBox").innerHTML="<h3>A Step Toward Healing</h3><p>"+rm+"</p><button class=\"recon-btn\" onclick=\"saveSession()\">Yes, I am willing</button>";
+S.prayer=generatePrayer(topics);showScreen("wisdom-screen");setStep(5)}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function generatePrayer(topics){
+var p="Lord Jesus, You who are the Prince of Peace and the Healer of all wounds, we bring before You this marriage. ";
+if(topics.indexOf("conflict")>-1||topics.indexOf("anger")>-1)p+="Help them set down their weapons of words and pick up understanding. When anger rises, remind them of Your gentleness. ";
+if(topics.indexOf("communication")>-1)p+="Teach them not just to speak, but to be heard. Not just to listen, but to understand. ";
+if(topics.indexOf("respect")>-1)p+="Help each see the dignity and worth in the other, even when it is hard to see. ";
+if(topics.indexOf("trust")>-1)p+="Where trust has been broken, plant seeds of honesty. Where suspicion has grown, water patience. ";
+if(topics.indexOf("forgiveness")>-1||topics.indexOf("past-hurts")>-1)p+="Where pride blocks forgiveness, remind them that Your love is stronger than any wound. ";
+if(topics.indexOf("intimacy")>-1)p+="Restore the closeness they once knew. Help them see each other with fresh eyes and open hearts. ";
+if(topics.indexOf("money")>-1)p+="Help them remember that money is a tool, not a master. ";
+if(topics.indexOf("parenting")>-1)p+="Give them unity in raising the children You have entrusted to them. ";
+if(topics.indexOf("faith")>-1)p+="Draw them closer to You and therefore closer to each other. ";
+p+="Above all, give them the humility to say they are sorry and the grace to forgive. Remind them that they are not enemies. They are one flesh. Amen.";return p}
+function showPrayer(){document.getElementById("prayerText").innerHTML=S.prayer.replace(/\n/g,"<br>");showScreen("prayer-screen");setStep(6)}
+var recog=null;var isRecording=false;
+function toggleIssueMic(){
+if(isRecording){stopRec();return}
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(!SR){document.getElementById("issueMicStatus").textContent="Speech not available";alert("Voice input is not available on this browser. Please type instead.");return}
+try{recog=new SR();
+recog.lang="en-US";recog.continuous=true;recog.interim=true;
+recog.onresult=function(e){var t="";for(var i=e.resultIndex;i<e.results.length;i++){t+=e.results[i][0].transcript}document.getElementById("issueInput").value+=t};
+recog.start();isRecording=true;document.getElementById("issueMicBtn").classList.add("recording");document.getElementById("issueMicStatus").textContent="Recording..."}
+catch(e){document.getElementById("issueMicStatus").textContent="Speech not available on this browser";alert("Web Speech API is not available on this browser. Please type instead.")}}
+function toggleSpeechMic(){
+if(isRecording){stopRec();return}
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(!SR){document.getElementById("speechMicStatus").textContent="Speech not available";alert("Voice input is not available on this browser. Please type instead.");return}
+try{recog=new SR();
+recog.lang="en-US";recog.continuous=true;recog.interim=true;
+recog.onresult=function(e){var t="";for(var i=e.resultIndex;i<e.results.length;i++){t+=e.results[i][0].transcript}document.getElementById("speechArea").value+=t};
+recog.start();isRecording=true;document.getElementById("speechMicBtn").classList.add("recording");document.getElementById("speechMicStatus").textContent="Recording..."}
+catch(e){document.getElementById("speechMicStatus").textContent="Speech not available";alert("Web Speech API not available. Please type instead.")}}
+function stopRec(){if(recog){try{recog.stop()}catch(e){}recog=null}isRecording=false;document.querySelectorAll(".mic-btn.recording").forEach(function(b){b.classList.remove("recording")});document.getElementById("issueMicStatus").textContent="Tap mic for voice input";document.getElementById("speechMicStatus").textContent="Tap mic to record"}
+function saveSession(){if(S.sessionSaved)return;S.sessionSaved=true;try{simpleDBSave()}catch(e){}}
+function simpleDBSave(){
+var id="sess-"+Date.now();var d={id:id,createdAt:new Date().toISOString(),title:S.issueText,spouseA:{name:S.spouseA.name,statement:S.spouseA.statement},spouseB:{name:S.spouseB.name,statement:S.spouseB.statement},analysis:S.analysis,prayer:S.prayer,reconciled:false};
+try{var sessions=JSON.parse(localStorage.getItem("oneflesh_sessions")||"[]");sessions.unshift(d);if(sessions.length>50)sessions=sessions.slice(0,50);localStorage.setItem("oneflesh_sessions",JSON.stringify(sessions))}catch(e){}}
+function loadHistory(){
+var h=document.getElementById("historyList");
+var sessions=[];
+if(window.__db){/* would load from indexeddb */}
+try{sessions=JSON.parse(localStorage.getItem("oneflesh_sessions")||"[]")}catch(e){}
+if(sessions.length===0){h.innerHTML="<div class=\"empty-state\"><span class=\"empty-icon\">&#x1F4AD;</span><p>No past sessions yet. Begin a session to start your journey.</p></div>";return}
+var html="";
+sessions.forEach(function(s){var d=new Date(s.createdAt);var ds=d.toLocaleDateString()+" "+d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+var st=s.reconciled?"Reconciled":"Pending";var sc=s.reconciled?"":"pending";
+html+="<div class=\"session-card\" onclick=\"viewSession(\'"+s.id+"\')\"><div class=\"s-date\">"+ds+"</div><div class=\"s-title\">"+escHtml(s.title.length>60?s.title.slice(0,60)+"...":s.title)+"</div><span class=\"s-status "+sc+"\">"+st+"</span></div>"})
+h.innerHTML=html}
+function viewSession(id){var sessions=JSON.parse(localStorage.getItem("oneflesh_sessions")||"[]");var s=null;sessions.forEach(function(x){if(x.id===id)s=x});if(!s)return alert("Session not found.");
+var m="Session: "+s.title+"\n\nHusband: "+s.spouseA.statement+"\n\nWife: "+s.spouseB.statement+"\n\nStatus: "+(s.reconciled?"Reconciled":"Pending");alert(m)}
+function endSession(){
+simpleDBSave();showScreen("welcome-screen");setStep(0);document.getElementById("progressBar").innerHTML=""}
+</script>
+</body>
+</html>
